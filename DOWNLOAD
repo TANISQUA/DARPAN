@@ -1,0 +1,112 @@
+#define BLYNK_PRINT Serial
+
+#define BLYNK_TEMPLATE_ID "TMPL3oQ_kg68I"
+#define BLYNK_TEMPLATE_NAME "handtracking1"
+#define BLYNK_AUTH_TOKEN "uJQw9qZI2Nb5if00zm1NkCqZVZPyK4nU"
+
+#include <ESP8266WiFi.h>
+#include <BlynkSimpleEsp8266.h>
+#include <Servo.h>
+
+char ssid[] = "IEDC LAB 505";
+char pass[] = "Iedclab505";
+
+int INDEX_FINGER=0;
+int MIDDLE_FINGER=0;
+int RING_FINGER=0;
+int LITTLE_FINGER=0;
+int THUMB_FINGER=0;
+int THUMB_SIDE=0;
+
+// Servo pin definitions
+#define pin1 5  
+#define pin2 4  
+#define pin4 2  
+#define pin6 12   
+#define pin7 13   
+#define pin8 15  
+
+Servo servo1, servo2, servo3, servo4, servo5, servo6;
+
+int index_angle = 0, middle_angle = 0, ring_angle = 0, little_angle = 0;
+int thumb_angle = 0, thumb_side_angle = 0, wrist_angle = 0, wrist_side_angle = 0;
+
+void setup() {
+  Serial.begin(9600);
+
+  servo1.attach(pin1);
+  servo2.attach(pin2);
+  servo3.attach(pin4);
+  servo4.attach(pin6);
+  servo5.attach(pin7);
+  servo6.attach(pin8);
+
+  Blynk.begin(BLYNK_AUTH_TOKEN, ssid, pass);
+}
+
+BLYNK_WRITE(V0){
+  INDEX_FINGER=param.asInt();
+  Serial.begin(9600);
+  servo1.write(index_angle*20);
+  printAllAngles();
+}
+
+BLYNK_WRITE(V1){
+  MIDDLE_FINGER=param.asInt();
+   Serial.begin(9600);
+  servo2.write(middle_angle*20);
+  printAllAngles();
+}
+
+BLYNK_WRITE(V2){
+  RING_FINGER=param.asInt();
+   Serial.begin(9600);
+  servo3.write(ring_angle*20);
+  printAllAngles();
+}
+
+BLYNK_WRITE(V3){
+  LITTLE_FINGER=param.asInt();
+   Serial.begin(9600);
+  servo4.write(little_angle*20);
+  printAllAngles();
+}
+
+BLYNK_WRITE(V4){
+  THUMB_FINGER=param.asInt();
+   Serial.begin(9600);
+  servo5.write(thumb_angle*20);
+  printAllAngles();
+}
+
+BLYNK_WRITE(V5){
+  THUMB_SIDE=param.asInt();
+   Serial.begin(9600);
+  servo6.write(thumb_side_angle*20);
+  printAllAngles();
+}
+
+void printAllAngles() {
+  Serial.print("ind_"); Serial.print(index_angle);
+  Serial.print(":mid_"); Serial.print(middle_angle);
+  Serial.print(":rin_"); Serial.print(ring_angle);
+  Serial.print(":lit_"); Serial.print(little_angle);
+  Serial.print(":thu_"); Serial.print(thumb_angle);
+  Serial.print(":ths_"); Serial.print(thumb_side_angle);
+  Serial.print(":wri_"); Serial.print(wrist_angle);
+  Serial.print(":wrh_"); Serial.println(wrist_side_angle);
+}
+
+void loop() {
+  Blynk.run();
+}
+// BLYNK_WRITE(V7){
+//   WRIST=param.asInt();
+//   servo7.write(index_angle*20);
+//   printAllAngles();
+// }
+// BLYNK_WRITE(V8){
+//   WRIST_SIDE=param.asInt();
+// }
+
+
